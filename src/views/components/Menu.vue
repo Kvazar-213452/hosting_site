@@ -1,32 +1,58 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, defineProps, onMounted } from 'vue';
+import $ from 'jquery';
 
 const isMenuOpen = ref(false);
 
-const toggleMenu = () => {
+const props = defineProps({
+  receivedValue: {
+    type: String,
+    required: true,
+  },
+});
+
+const localValue = ref(props.receivedValue);
+
+function toggleMenu() {
   isMenuOpen.value = !isMenuOpen.value;
-};
+}
+
+function updateMenuColors() {
+  console.log(localValue.value);
+
+  $('ul li a').each(function() {
+    $(this).css('color', 'black');
+
+    if ($(this).attr('id') === localValue.value) {
+      $(this).css('color', 'red');
+    }
+  });
+}
+
+onMounted(() => {
+  updateMenuColors();
+});
 </script>
 
 <template>
-    <header>
-        <nav>
-            <h1>UnixHosting</h1>
-            <button @click="toggleMenu" aria-label="Toggle menu" class="menu-toggle">☰</button>
-            <ul :class="{ 'menu-open': isMenuOpen }">
-                <div class="exit">
-                    <p @click="toggleMenu" class="exit_btn">&#10006;</p>
-                    <br>
-                    <h1 class="name_menu">UnixHosting</h1>
-                </div>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#services">Web Hosting</a></li>
-                <li><a href="#services">VPS</a></li>
-                <li><a href="#contact">Help</a></li>
-            </ul>
-        </nav>
-    </header>
+  <header>
+    <nav>
+      <h1>UnixHosting</h1>
+      <button @click="toggleMenu" aria-label="Toggle menu" class="menu-toggle">☰</button>
+      <ul :class="{ 'menu-open': isMenuOpen }">
+        <div class="exit">
+          <p @click="toggleMenu" class="exit_btn">&#10006;</p>
+          <br>
+          <h1 class="name_menu">UnixHosting</h1>
+        </div>
+        <li><a id="home" href="#home">Home</a></li>
+        <li><a id="about" href="#about">About</a></li>
+        <li><a href="#services">Web Hosting</a></li>
+        <li><a href="#services">VPS</a></li>
+        <li><a href="#contact">Help</a></li>
+      </ul>
+    </nav>
+  </header>
 </template>
 
 <style scoped>
@@ -63,7 +89,7 @@ h1 {
 header {
   background-color: var(--white);
   padding: 1rem;
-  position: fixed;
+  position: absolute;
   width: calc(100% - 90px);
   left: 30px;
   border-bottom-left-radius: 20px;

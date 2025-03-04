@@ -12,4 +12,11 @@ body {
     font-family: 'Roboto', sans-serif;
     background-color: var(--bg_1);
 }
-  
+
+.hr {
+    position: relative;
+    background-color: #acacac;
+    height: 1.5px;
+    width: calc(100% - 90px);
+    left: 30px;
+}
